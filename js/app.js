@@ -17,11 +17,9 @@ let deferredPrompt;
 const installBtn = document.getElementById('install-btn');
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  // Impede que o navegador exiba o banner automático padrão
   e.preventDefault();
   deferredPrompt = e;
   
-  // Exibe o botão de instalação customizado na página
   if (installBtn) {
     installBtn.style.display = 'block';
   }
@@ -90,7 +88,7 @@ if (geoBtn && geoOutput) {
 }
 
 // ==========================================================================
-// 4. LÓGICA DE BUSCA DE ANIMES (JIKAN API V4)
+// 4. LÓGICA DE BUSCA DE ANIMES (JIKAN API COM FALLBACK AUTOMÁTICO PARA KITSU API)
 // ==========================================================================
 const searchBtn = document.getElementById('search-btn');
 const searchInput = document.getElementById('search-input');
@@ -99,7 +97,6 @@ const resultsContainer = document.getElementById('results-container');
 if (searchBtn && searchInput) {
   searchBtn.addEventListener('click', handleSearch);
 
-  // Permite buscar pressionando a tecla "Enter" no teclado
   searchInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
       handleSearch();
@@ -118,17 +115,50 @@ async function handleSearch() {
   resultsContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Buscando animes...</p>';
 
   try {
-    const response = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=8`);
-    
+    // Tenta carregar pela API principal (Jikan)
+    const jikanUrl = `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=8`;
+    const response = await fetch(jikanUrl);
+
     if (!response.ok) {
-      throw new Error('Erro na resposta da API');
+      throw new Error(`Jikan HTTP status: ${response.status}`);
     }
 
     const data = await response.json();
-    renderAnimeResults(data.data);
-  } catch (error) {
-    console.error('Erro na busca de animes:', error);
-    resultsContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ff6b6b;">Erro ao carregar os animes. Verifique sua conexão e tente novamente.</p>';
+    
+    // Converte resposta do Jikan para o padrão da aplicação
+    const formattedAnimes = data.data.map((item) => ({
+      title: item.title,
+      image: item.images?.jpg?.image_url
+    }));
+
+    renderAnimeResults(formattedAnimes);
+
+  } catch (jikanError) {
+    console.warn('Jikan API indisponível ou bloqueada. Tentando API de fallback (Kitsu)...', jikanError);
+
+    try {
+      // Fallback: API Kitsu
+      const kitsuUrl = `https://kitsu.io/api/edge/anime?filter[text]=${encodeURIComponent(query)}&page[limit]=8`;
+      const kitsuResponse = await fetch(kitsuUrl);
+
+      if (!kitsuResponse.ok) {
+        throw new Error(`Kitsu HTTP status: ${kitsuResponse.status}`);
+      }
+
+      const kitsuData = await kitsuResponse.json();
+      
+      // Converte resposta da Kitsu para o padrão da aplicação
+      const formattedAnimes = kitsuData.data.map((item) => ({
+        title: item.attributes.canonicalTitle || item.attributes.titles.en_jp,
+        image: item.attributes.posterImage?.small || item.attributes.posterImage?.original
+      }));
+
+      renderAnimeResults(formattedAnimes);
+
+    } catch (kitsuError) {
+      console.error('Falha em ambas as APIs:', kitsuError);
+      resultsContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ff6b6b;">Servidores de busca temporariamente indisponíveis. Verifique sua conexão e tente novamente em instantes.</p>';
+    }
   }
 }
 
@@ -141,12 +171,10 @@ function renderAnimeResults(animes) {
   }
 
   animes.forEach((anime) => {
-    const imageUrl = anime.images?.jpg?.image_url || '';
-    
     const card = document.createElement('article');
     card.className = 'anime-card';
     card.innerHTML = `
-      <img src="${imageUrl}" alt="${anime.title}" loading="lazy" />
+      <img src="${anime.image || ''}" alt="${anime.title}" loading="lazy" />
       <h3>${anime.title}</h3>
     `;
 
