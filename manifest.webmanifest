@@ -1,0 +1,19 @@
+{
+  "name": "Buscador de Animes",
+  "short_name": "Animes",
+  "description": "Busque animes e consulte seus detalhes em uma Progressive Web App.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0e101b",
+  "theme_color": "#ee5f9b",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
