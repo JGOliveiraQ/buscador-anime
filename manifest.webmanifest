@@ -1,17 +1,16 @@
 {
-  "name": "Buscador de Animes",
-  "short_name": "Animes",
-  "description": "Busque animes e consulte seus detalhes em uma Progressive Web App.",
-  "start_url": "./",
-  "scope": "./",
+  "name": "Buscador de Anime PWA",
+  "short_name": "BuscadorAnime",
+  "description": "Aplicação PWA para busca e recomendação de animes.",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0e101b",
-  "theme_color": "#ee5f9b",
-  "lang": "pt-BR",
+  "background_color": "#12121e",
+  "theme_color": "#7000ff",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "icons/icon.svg",
-      "sizes": "any",
+      "sizes": "192x192 512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
