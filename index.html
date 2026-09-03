@@ -1,53 +1,57 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#ee5f9b">
-  <meta name="description" content="Pesquisa de animes com suporte a PWA e geolocalização.">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <title>Pesquisa de Animes</title>
-  <link rel="preconnect" href="https://graphql.anilist.co">
-  <link rel="preconnect" href="https://cdn.myanimelist.net">
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#7000ff" />
+  <meta name="description" content="Aplicação PWA para busca e consulta de animes com integração a recursos de hardware." />
+  
+  <title>Buscador de Anime PWA</title>
+
+  <!-- PWA e Ícones -->
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
+  <link rel="manifest" href="manifest.webmanifest" />
+
+  <!-- Estilização CSS -->
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <main class="pagina-inicial">
-    <section class="cabecalho" aria-labelledby="titulo-principal">
-      <div>
-        <p class="etiqueta">PWA · ANIME</p>
-        <h1 id="titulo-principal">Buscador de Animes</h1>
-        <p class="subtitulo">Encontre seus animes favoritos e veja informações completas.</p>
-      </div>
-      <button class="botao-localizacao" id="botao-localizacao" type="button">📍 Usar minha localização</button>
+
+  <!-- Cabeçalho Principal -->
+  <header>
+    <h1>Buscador de Anime</h1>
+    <!-- Botão de Instalação PWA (exibido apenas se o navegador suportar instalação) -->
+    <button id="install-btn" style="display: none;">Instalar App</button>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main>
+    
+    <!-- 1. Seção da Barra de Busca -->
+    <section class="search-section">
+      <input 
+        type="text" 
+        id="search-input" 
+        placeholder="Digite o nome de um anime (ex: Naruto)..." 
+        aria-label="Digitar nome do anime"
+      />
+      <button id="search-btn">Buscar</button>
     </section>
 
-    <section class="area-busca" aria-label="Pesquisa">
-      <form class="busca" id="form-busca" role="search">
-        <label class="sr-only" for="campo-busca">Pesquisar anime</label>
-        <input id="campo-busca" type="search" placeholder="Ex.: Frieren, Naruto, Haikyuu" autocomplete="off">
-        <button type="submit">Buscar</button>
-      </form>
-      <p class="status-localizacao" id="status-localizacao" aria-live="polite"></p>
+    <!-- 2. Seção do Recurso de Hardware (Geolocalização / GPS) -->
+    <section class="hardware-feature">
+      <h2>Recurso do Dispositivo (GPS)</h2>
+      <button id="geo-btn">Obter Minha Localização</button>
+      <p id="geo-output">Clique no botão acima para permitir o acesso à sua localização.</p>
     </section>
 
-    <section class="resultados" aria-label="Resultados da busca">
-      <div class="mensagem" id="mensagem" aria-live="polite" hidden></div>
-      <div class="grade-animes" id="grade-animes"></div>
-    </section>
+    <!-- 3. Seção do Grid com os Resultados dos Animes -->
+    <section id="results-container" class="results-grid" aria-live="polite"></section>
+
   </main>
 
-  <dialog class="modal" id="modal-detalhes" aria-labelledby="modal-titulo">
-    <button class="fechar-modal" id="fechar-modal" type="button" aria-label="Fechar detalhes">×</button>
-    <div class="modal-conteudo" id="modal-conteudo"></div>
-  </dialog>
-
+  <!-- Lógica da Aplicação JavaScript -->
   <script src="js/app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
-    }
-  </script>
 </body>
 </html>
