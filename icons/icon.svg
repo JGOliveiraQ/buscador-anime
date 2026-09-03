@@ -1,1 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#0e101b"/><circle cx="256" cy="220" r="128" fill="#ee5f9b"/><path d="M154 205c20-57 65-91 102-91s82 34 102 91c-31-17-67-26-102-26s-71 9-102 26Z" fill="#fff" opacity=".95"/><circle cx="208" cy="228" r="16" fill="#0e101b"/><circle cx="304" cy="228" r="16" fill="#0e101b"/><path d="M204 287c31 28 73 28 104 0" fill="none" stroke="#0e101b" stroke-width="16" stroke-linecap="round"/><path d="M154 352h204" stroke="#fff" stroke-width="18" stroke-linecap="round" opacity=".9"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Gradiente do fundo -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7000ff"/>
+      <stop offset="100%" stop-color="#12121e"/>
+    </linearGradient>
+
+    <!-- Gradiente dos detalhes da lupa -->
+    <linearGradient id="icon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#4facfe"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Fundo com bordas arredondadas (padrão de ícone mobile) -->
+  <rect width="512" height="512" rx="110" fill="url(#bg-grad)"/>
+
+  <!-- Ícone central: Lupa + Brilho Anime -->
+  <g transform="translate(100, 100) scale(0.61)">
+    <!-- Lente da Lupa -->
+    <circle cx="210" cy="210" r="140" fill="none" stroke="url(#icon-grad)" stroke-width="36"/>
+    
+    <!-- Cabo da Lupa -->
+    <line x1="310" y1="310" x2="450" y2="450" stroke="url(#icon-grad)" stroke-width="36" stroke-linecap="round"/>
+    
+    <!-- Estrela / Brilho Anime no centro -->
+    <path d="M210 130 L225 195 L290 210 L225 225 L210 290 L195 225 L130 210 L195 195 Z" fill="#ffffff"/>
+  </g>
+</svg>
